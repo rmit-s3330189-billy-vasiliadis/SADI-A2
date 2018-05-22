@@ -34,7 +34,15 @@ public class GameMouseListener implements MouseListener {
         placeBet();
       }
     } else if(buttonClicked.getText().equals("Roll Dice")) {
-      
+      if(gameState.getCurrentPlayer().equals("House")) {
+        //houseRoll();
+      } else if(gameState.hasCurrentPlayerRolled()) {
+        JOptionPane.showMessageDialog(GUI, "This player has already rolled for this round");
+      } else if(!gameState.hasCurrentPlayerPlacedBet()) {
+        JOptionPane.showMessageDialog(GUI, "Bet not placed, cannot roll");
+      } else {
+        playerRoll();  
+      }    
     }
     //call game engine methods on a new thread
     //new Thread()...
@@ -89,5 +97,16 @@ public class GameMouseListener implements MouseListener {
     }
     gameState.setBetPlacedForCurrentPlayer();
     GUI.getStatusInfoPanel().updateBetInfo(String.valueOf(bet));
+  }
+
+  public void playerRoll() {
+    final Player currentPlayer = gameEngine.getPlayer(gameState.getCurrentPlayer());
+    //do this on another thread so that the UI does not block
+    new Thread() {
+      public void run() {
+        gameEngine.rollPlayer(currentPlayer, 1, 100, 20);
+      }  
+    }.start();
+    gameState.setCurrentPlayerRolled();
   }
 }

@@ -25,9 +25,7 @@ public class SimpleTestClient
 	{
     SwingUtilities.invokeLater(new Runnable() {
       public void run() {
-        final GameEngine gameEngine = new GameEngineImpl();
-        gameEngine.addGameEngineCallback(new GameEngineCallbackImpl());
-        new GameEngineCallbackGUI(gameEngine, new GameState());
+        new GameEngineCallbackGUI(new GameState());
       }
     });
 		// instantiate the GameEngine so we can make calls

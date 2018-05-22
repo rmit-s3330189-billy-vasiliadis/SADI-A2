@@ -1,6 +1,7 @@
 package view;
 
 import model.interfaces.GameEngine;
+import model.GameEngineImpl;
 import controller.GameMouseListener;
 import controller.GameState;
 import controller.GameItemListener;
@@ -13,10 +14,10 @@ public class GameEngineCallbackGUI extends JFrame{
   private GameEngine gameEngine;
   private GameState gameState;
   private StatusInfoPanel statusInfoPanel;
+  private RollResultPanel rollResultPanel;
 
-  public GameEngineCallbackGUI(GameEngine gameEngine, GameState gameState) {
+  public GameEngineCallbackGUI(GameState gameState) {
     super("Dice Game");
-    this.gameEngine = gameEngine;
     this.gameState = gameState;
     
     //set layout of the content pane
@@ -53,9 +54,12 @@ public class GameEngineCallbackGUI extends JFrame{
     main.add(statusPanel);
 
     //JPanel for showing dice roll results
-    JPanel rollDicePanel = new JPanel();
-    rollDicePanel.add(new JTextArea("Roll Dice",10,20)); 
-    main.add(rollDicePanel);
+    rollResultPanel = new RollResultPanel();
+    main.add(rollResultPanel);
+
+    //create game engine and add callback
+    gameEngine = new GameEngineImpl();
+    gameEngine.addGameEngineCallback(new GameEngineCallbackImpl(this));
 
     //add event listeners
     GameMouseListener mouseListener = new GameMouseListener(this, gameEngine, gameState);
@@ -64,7 +68,7 @@ public class GameEngineCallbackGUI extends JFrame{
     placeBetButton.addMouseListener(mouseListener);
     rollButton.addMouseListener(mouseListener);
     playerSelect.addItemListener(itemListener);
-    
+
     //make visible
     setBounds(100,100,1000,200);
     setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -77,5 +81,9 @@ public class GameEngineCallbackGUI extends JFrame{
 
   public StatusInfoPanel getStatusInfoPanel() {
     return statusInfoPanel;  
+  }
+
+  public RollResultPanel getRollResultPanel() {
+    return rollResultPanel;  
   }
 }

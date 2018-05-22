@@ -1,5 +1,7 @@
 package controller;
 
+import java.util.*;
+
 public class GameState {
   private String playerCurrentlySelected;
   private ArrayList<String> betPlaced;
@@ -16,7 +18,7 @@ public class GameState {
   }
 
   public void setCurrentPlayer(String playerId) {
-    playerCurrentlySelected = name;  
+    playerCurrentlySelected = playerId;  
   }
 
   public boolean hasCurrentPlayerPlacedBet() {
