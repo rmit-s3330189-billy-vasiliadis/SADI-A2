@@ -49,7 +49,7 @@ public class GameEngineCallbackGUI extends JFrame{
     playerSelect.addItem("House");
     statusPanel.add(playerSelect, BorderLayout.NORTH);
     
-    statusInfoPanel = new StatusInfoPanel();
+    statusInfoPanel = new StatusInfoPanel(gameState);
     statusPanel.add(statusInfoPanel, BorderLayout.CENTER);  
     main.add(statusPanel);
 

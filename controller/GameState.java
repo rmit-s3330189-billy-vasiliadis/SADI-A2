@@ -43,5 +43,15 @@ public class GameState {
     hasRolled.add(playerCurrentlySelected);  
   }
 
-  public void resetState() {}
+  public boolean haveAllPlayersRolled(int noOfPlayers) {
+    if(hasRolled.size() == noOfPlayers) {
+      return true;  
+    }  
+    return false;
+  }
+
+  public void resetState() {
+    betPlaced.clear();
+    hasRolled.clear();
+  }
 }

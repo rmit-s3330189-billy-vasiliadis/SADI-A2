@@ -31,6 +31,7 @@ public class SimplePlayer implements Player {
 
 	public void setPoints(int points) {
 		this.points = points;
+    this.bet = 0;
 	}
 
 	public String getPlayerId() {
@@ -42,7 +43,6 @@ public class SimplePlayer implements Player {
 			this.bet = bet;
 			return true;
 		} 
-		//this.bet = 0;
 		return false;
 	}
 

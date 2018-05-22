@@ -4,12 +4,12 @@ import java.awt.*;
 import javax.swing.*;
 
 public class RollResultPanel extends JPanel {
-  JLabel intermediateDiceOne;
-  JLabel intermediateDiceTwo;
-  JLabel intermediateTotal;
-  JLabel finalDiceOne;
-  JLabel finalDiceTwo;
-  JLabel finalTotal;
+  private JLabel intermediateDiceOne;
+  private JLabel intermediateDiceTwo;
+  private JLabel intermediateTotal;
+  private JLabel finalDiceOne;
+  private JLabel finalDiceTwo;
+  private JLabel finalTotal;
 
   public RollResultPanel() {
     setLayout(new GridLayout(8,2));

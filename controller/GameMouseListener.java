@@ -7,6 +7,7 @@ import view.GameEngineCallbackGUI;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
+import java.util.*;
 
 public class GameMouseListener implements MouseListener {
   private GameEngineCallbackGUI GUI;
@@ -35,7 +36,14 @@ public class GameMouseListener implements MouseListener {
       }
     } else if(buttonClicked.getText().equals("Roll Dice")) {
       if(gameState.getCurrentPlayer().equals("House")) {
-        //houseRoll();
+        int noOfPlayers = gameEngine.getAllPlayers().size();
+        if(noOfPlayers == 0) {
+          JOptionPane.showMessageDialog(GUI, "No players have been added");
+        } else if(gameState.haveAllPlayersRolled(noOfPlayers)) {
+          houseRoll();  
+        } else {
+          JOptionPane.showMessageDialog(GUI, "Not all players have rolled yet");  
+        }
       } else if(gameState.hasCurrentPlayerRolled()) {
         JOptionPane.showMessageDialog(GUI, "This player has already rolled for this round");
       } else if(!gameState.hasCurrentPlayerPlacedBet()) {
@@ -44,8 +52,6 @@ public class GameMouseListener implements MouseListener {
         playerRoll();  
       }    
     }
-    //call game engine methods on a new thread
-    //new Thread()...
   } 
 
   public void mouseEntered(MouseEvent e) {
@@ -108,5 +114,15 @@ public class GameMouseListener implements MouseListener {
       }  
     }.start();
     gameState.setCurrentPlayerRolled();
+  }
+
+  public void houseRoll() {
+    //do this on another thread so that the UI does not block
+    new Thread() {
+      public void run() {
+        gameEngine.rollHouse(1, 100, 20);
+      }  
+    }.start();
+    gameState.resetState();
   }
 }

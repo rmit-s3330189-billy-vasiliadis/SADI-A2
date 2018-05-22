@@ -5,6 +5,7 @@ import javax.swing.*;
 import view.GameEngineCallbackGUI;
 import model.interfaces.Player;
 import model.interfaces.GameEngine;
+import model.interfaces.DicePair;
 
 public class GameItemListener implements ItemListener {
   private GameEngineCallbackGUI GUI;
@@ -22,15 +23,24 @@ public class GameItemListener implements ItemListener {
       String item = (String)e.getItem();
       if(item.equals("House")) {
         gameState.setCurrentPlayer("House");
-        GUI.getStatusInfoPanel().updateStatusInfo(item, "N/A", "N/A", "N"); 
+        GUI.getStatusInfoPanel().updateStatusInfo(item, "N/A", "N/A", "N/A"); 
       } else {
         String playerId = item.split(":")[0].trim();
         String name = item.split(":")[1].trim();
+
         Player playerSelected = gameEngine.getPlayer(playerId);
         gameState.setCurrentPlayer(playerId);
+        
         String points = String.valueOf(playerSelected.getPoints());
         String bet = String.valueOf(playerSelected.getBet());
-        GUI.getStatusInfoPanel().updateStatusInfo(name, points, bet, "N");
+        
+        if(gameState.hasCurrentPlayerRolled()) {
+          DicePair finalResult = playerSelected.getRollResult();
+          String finalTotal = String.valueOf(finalResult.getDice1() + finalResult.getDice2());
+          GUI.getStatusInfoPanel().updateStatusInfo(name, points, bet, finalTotal);
+        } else {
+          GUI.getStatusInfoPanel().updateStatusInfo(name, points, bet, "N/A");
+        }
       }
     }
   }
