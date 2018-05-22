@@ -20,6 +20,10 @@ public class GameEngineCallbackGUI extends JFrame{
     super("Dice Game");
     this.gameState = gameState;
     
+    //create game engine and add callback
+    gameEngine = new GameEngineImpl();
+    gameEngine.addGameEngineCallback(new GameEngineCallbackImpl(this));
+
     //set layout of the content pane
     setLayout(new BorderLayout());
     
@@ -49,17 +53,13 @@ public class GameEngineCallbackGUI extends JFrame{
     playerSelect.addItem("House");
     statusPanel.add(playerSelect, BorderLayout.NORTH);
     
-    statusInfoPanel = new StatusInfoPanel(gameState);
+    statusInfoPanel = new StatusInfoPanel(gameState, gameEngine);
     statusPanel.add(statusInfoPanel, BorderLayout.CENTER);  
     main.add(statusPanel);
 
     //JPanel for showing dice roll results
     rollResultPanel = new RollResultPanel();
     main.add(rollResultPanel);
-
-    //create game engine and add callback
-    gameEngine = new GameEngineImpl();
-    gameEngine.addGameEngineCallback(new GameEngineCallbackImpl(this));
 
     //add event listeners
     GameMouseListener mouseListener = new GameMouseListener(this, gameEngine, gameState);

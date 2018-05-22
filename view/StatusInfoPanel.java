@@ -3,6 +3,8 @@ package view;
 import java.awt.*;
 import javax.swing.*;
 import controller.GameState;
+import model.interfaces.Player;
+import model.interfaces.GameEngine;
 
 public class StatusInfoPanel extends JPanel {
   private JLabel name;
@@ -10,9 +12,11 @@ public class StatusInfoPanel extends JPanel {
   private JLabel bet;
   private JLabel finalResult;
   private GameState gameState;  
+  private GameEngine gameEngine;
 
-  public StatusInfoPanel(GameState gameState) {
+  public StatusInfoPanel(GameState gameState, GameEngine gameEngine) {
     this.gameState = gameState;
+    this.gameEngine = gameEngine;
 
     setLayout(new GridLayout(4,2));
 
@@ -61,6 +65,14 @@ public class StatusInfoPanel extends JPanel {
   }
 
   public void updateFinalHouseResult(String total) {
-    this.finalResult.setText(total);  
+    if(gameState.getCurrentPlayer().equals("House")) {
+      this.finalResult.setText(total); 
+    } else {
+      Player currentPlayer = gameEngine.getPlayer(gameState.getCurrentPlayer());
+      System.out.println(currentPlayer);
+      this.points.setText(String.valueOf(currentPlayer.getPoints()));
+      this.bet.setText(String.valueOf(currentPlayer.getBet()));
+      this.finalResult.setText("N/A");
+    }
   }
 }
