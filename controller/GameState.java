@@ -6,11 +6,13 @@ public class GameState {
   private String playerCurrentlySelected;
   private ArrayList<String> betPlaced;
   private ArrayList<String> hasRolled;
-  
+  private boolean currentlyRolling;
+
   public GameState() {
     playerCurrentlySelected = "House";  
     betPlaced = new ArrayList<String>();
     hasRolled = new ArrayList<String>();
+    currentlyRolling = false;
   }
 
   public String getCurrentPlayer() {
@@ -48,6 +50,18 @@ public class GameState {
       return true;  
     }  
     return false;
+  }
+
+  public void startedRolling() {
+    currentlyRolling = true;  
+  }
+
+  public void finishedRolling() {
+    currentlyRolling = false;
+  }
+
+  public boolean isPlayerRolling() {
+    return currentlyRolling;  
   }
 
   public void resetState() {

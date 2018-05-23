@@ -35,7 +35,9 @@ public class GameMouseListener implements MouseListener {
         placeBet();
       }
     } else if(buttonClicked.getText().equals("Roll Dice")) {
-      if(gameState.getCurrentPlayer().equals("House")) {
+      if(gameState.isPlayerRolling()) {
+        JOptionPane.showMessageDialog(GUI, "Wait for current roll to finish");  
+      } else if(gameState.getCurrentPlayer().equals("House")) {
         int noOfPlayers = gameEngine.getAllPlayers().size();
         if(noOfPlayers == 0) {
           JOptionPane.showMessageDialog(GUI, "No players have been added");
@@ -67,13 +69,25 @@ public class GameMouseListener implements MouseListener {
   }
 
   public void addPlayer() {
-    String name = JOptionPane.showInputDialog(GUI, "Enter your name");
+    String name;
+    while(true) {
+      if((name = JOptionPane.showInputDialog(GUI, "Enter your name")).equals("")) {
+        JOptionPane.showMessageDialog(GUI, "Your name cannot be empty");
+        continue;
+      }
+      break;
+    }
+
     int initPoints;
     while(true) {
       try {
         initPoints = Integer.parseInt(JOptionPane.showInputDialog(GUI, "Enter your initial points")); 
       } catch(NumberFormatException e) {
         JOptionPane.showMessageDialog(GUI, "Not a valid number, try again");
+        continue;
+      }
+      if(initPoints < 500) {
+        JOptionPane.showMessageDialog(GUI, "Your initial points have to be at least 500");
         continue;
       }
       break;
@@ -93,7 +107,10 @@ public class GameMouseListener implements MouseListener {
         JOptionPane.showMessageDialog(GUI, "Not a valid number, try again");
         continue;
       }
-      if(gameEngine.placeBet(currentPlayer, bet)) {
+      if(bet < 100) {
+        JOptionPane.showMessageDialog(GUI, "Your bet has to be at least 100");
+        continue;
+      } else if(gameEngine.placeBet(currentPlayer, bet)) {
         JOptionPane.showMessageDialog(GUI, "Your bet has been placed");  
       } else {
         JOptionPane.showMessageDialog(GUI, "Your bet is too high");
@@ -106,6 +123,7 @@ public class GameMouseListener implements MouseListener {
   }
 
   public void playerRoll() {
+    gameState.startedRolling();
     final Player currentPlayer = gameEngine.getPlayer(gameState.getCurrentPlayer());
     //do this on another thread so that the UI does not block
     new Thread() {
@@ -117,12 +135,13 @@ public class GameMouseListener implements MouseListener {
   }
 
   public void houseRoll() {
+    gameState.startedRolling();
     //do this on another thread so that the UI does not block
     new Thread() {
       public void run() {
         gameEngine.rollHouse(1, 100, 20);
       }  
     }.start();
-    gameState.resetState();
+    //gameState.resetState();
   }
 }

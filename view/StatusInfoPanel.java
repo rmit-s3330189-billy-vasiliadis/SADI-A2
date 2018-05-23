@@ -62,6 +62,7 @@ public class StatusInfoPanel extends JPanel {
     if(gameState.getCurrentPlayer().equals(playerId)) {
       this.finalResult.setText(total);  
     }
+    gameState.finishedRolling();
   }
 
   public void updateFinalHouseResult(String total) {
@@ -69,10 +70,11 @@ public class StatusInfoPanel extends JPanel {
       this.finalResult.setText(total); 
     } else {
       Player currentPlayer = gameEngine.getPlayer(gameState.getCurrentPlayer());
-      System.out.println(currentPlayer);
       this.points.setText(String.valueOf(currentPlayer.getPoints()));
       this.bet.setText(String.valueOf(currentPlayer.getBet()));
       this.finalResult.setText("N/A");
     }
+    gameState.resetState();
+    gameState.finishedRolling();
   }
 }
